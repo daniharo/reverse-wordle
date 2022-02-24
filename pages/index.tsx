@@ -15,12 +15,23 @@ const useMatrix = () =>
 
 type MatrixSetter = ReturnType<typeof useMatrix>[1]
 
+interface IMatch {
+  match?: RegExpMatchArray;
+}
+const Match: FC<IMatch> = ({match}) => {
+  if (!match) {
+    return 'no results'
+  }
+  return <p className={styles.solutions}>{(match as RegExpMatchArray).join(', ')}</p>
+}
+
 const Home: NextPage = () => {
   const { error, data: dataset = '' } = useFetch('/5char.es.txt', {}, [])
   const [matrixData, setMatrixData] = useMatrix()
   const [match, setMatch] = useState<RegExpMatchArray | null>(null)
-  const renderCell = (j: number) => (c: CharCell, i: number) =>
-    <Cell setter={setMatrixData} i={i} j={j} key={i} data={c} />
+  const renderCell = (j: number) => function renderSpecificRow (c: CharCell, i: number) {
+    return <Cell setter={setMatrixData} i={i} j={j} key={i} data={c} />
+  }
   const body = matrixData.map((row, j) => (
     <div className="row" key={j}>
       {row.map(renderCell(j))}
@@ -32,12 +43,6 @@ const Home: NextPage = () => {
     const match = dataset.match(regExp)
     setMatch(match)
   }
-  const renderMatch = () => {
-    if (!match) {
-      return 'no results'
-    }
-    return <p className={styles.solutions}>{(match as RegExpMatchArray).join(', ')}</p>
-  }
   return (
     <div className={styles.container}>
       <Header />
@@ -45,7 +50,7 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>Welcome to Reverse Wordle!</h1>
         {body}
         <button onClick={onClickSolve}>Solve</button>
-        {renderMatch()}
+        <Match match={match} />
       </main>
     </div>
   )
