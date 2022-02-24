@@ -101,5 +101,6 @@ const Header = memo(() => (
     <link rel="icon" href="/favicon.ico" />
   </Head>
 ))
+Header.displayName = 'Header'
 
 export default Home
