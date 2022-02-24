@@ -16,7 +16,7 @@ const useMatrix = () =>
 type MatrixSetter = ReturnType<typeof useMatrix>[1]
 
 interface IMatch {
-  match?: RegExpMatchArray;
+  match?: RegExpMatchArray | null;
 }
 const Match: FC<IMatch> = ({match}) => (
   <>
