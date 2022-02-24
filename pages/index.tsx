@@ -18,12 +18,14 @@ type MatrixSetter = ReturnType<typeof useMatrix>[1]
 interface IMatch {
   match?: RegExpMatchArray;
 }
-const Match: FC<IMatch> = ({match}) => {
-  if (!match) {
-    return 'no results'
-  }
-  return <p className={styles.solutions}>{(match as RegExpMatchArray).join(', ')}</p>
-}
+const Match: FC<IMatch> = ({match}) => (
+  <>
+    {match
+      ? <p className={styles.solutions}>{(match as RegExpMatchArray).join(', ')}</p>
+      : 'no results'
+      }
+  </>
+)
 
 const Home: NextPage = () => {
   const { error, data: dataset = '' } = useFetch('/5char.es.txt', {}, [])
